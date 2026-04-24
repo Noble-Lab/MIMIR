@@ -117,7 +117,16 @@ def evaluate_imputations(
                 alpha=0.8,
                 linewidths=0,
             )
-            plt.xlabel("True values", fontsize=18)
+            
+            # --- make x/y scales identical + add y=x line ---
+            lo = np.nanmin([x_plot.min(), y_plot.min()])
+            hi = np.nanmax([x_plot.max(), y_plot.max()])
+            plt.xlim(lo, hi)
+            plt.ylim(lo, hi)
+            plt.gca().set_aspect("equal", adjustable="box")
+            plt.plot([lo, hi], [lo, hi], linestyle="--", linewidth=1, color='black')
+            
+            plt.xlabel("Observed values", fontsize=18)
             plt.ylabel("Imputed values", fontsize=18)
             plt.title(
                 f"present={modalities_present}, target={target_mod}\n"
@@ -278,6 +287,7 @@ def evaluate_values_imputation(
     max_points_plot: int = 5000,
     seed: int = 0,
     use_kde_if_available: bool = True,
+    title: str = "MCAR"
 ) -> Dict[str, Dict[str, Any]]:
     """
     Evaluate reconstructions from mask_and_predict using the saved pickles.
@@ -411,11 +421,20 @@ def evaluate_values_imputation(
             else:
                 plt.scatter(x_plot, y_plot, s=4, alpha=0.35, linewidths=0)
 
-            plt.xlabel("True values", fontsize=18)
+
+            # --- make x/y scales identical + add y=x line ---
+            lo = np.nanmin([x_plot.min(), y_plot.min()])
+            hi = np.nanmax([x_plot.max(), y_plot.max()])
+            plt.xlim(lo, hi)
+            plt.ylim(lo, hi)
+            plt.gca().set_aspect("equal", adjustable="box")
+            plt.plot([lo, hi], [lo, hi], linestyle="--", linewidth=1, color='black')
+
+            plt.xlabel("Observed values", fontsize=18)
             plt.ylabel("Imputed values", fontsize=18)
             plt.title(
-                f"{mod} ({evaluate_on})\n"
-                f"r={pearson:.3f}, ρ={spearman:.3f}, MSE={mse:.4g}",
+                f"{mod} ({title})\n"
+                f"r={pearson:.3f}",
                 fontsize=14,
             )
             plt.xticks(fontsize=14)

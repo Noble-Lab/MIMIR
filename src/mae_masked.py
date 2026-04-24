@@ -494,6 +494,7 @@ def finetune_epoch(
     device,
     mask_values: Dict[str, float],
     lambda_contrastive: float = 1.0,
+    lambda_recon: float = 1.0,
     lambda_impute: float = 1.0,
     modality_dropout_prob: float = 0.2,
     feature_mask_p: float = 0.1,
@@ -566,7 +567,7 @@ def finetune_epoch(
                 orig_missing_masks=orig_missing_masks,
             )
 
-        total = rloss + lambda_contrastive * closs + lambda_impute * iloss
+        total = lambda_recon* rloss + lambda_contrastive * closs + lambda_impute * iloss
 
         optimizer.zero_grad()
         total.backward()
@@ -603,6 +604,7 @@ def eval_finetune_epoch(
     device,
     mask_values: Dict[str, float],
     lambda_contrastive: float = 1.0,
+    lambda_recon: float = 1.0,
     lambda_impute: float = 1.0,
     feature_mask_p: float = 0.0,
     alpha_mask_recon: float = 0.5,
@@ -661,7 +663,7 @@ def eval_finetune_epoch(
                     orig_missing_masks=orig_missing_masks,
                 )
 
-            total = rloss + lambda_contrastive * closs + lambda_impute * iloss
+            total = lambda_recon * rloss + lambda_contrastive * closs + lambda_impute * iloss
 
             sums["total"]    += total.item()
             sums["recon"]    += rloss.item()

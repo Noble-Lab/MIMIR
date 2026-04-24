@@ -30,6 +30,7 @@ def run_shared_finetune(
     epochs: int = 100,
     lambda_contrast: float = 1.0,
     lambda_impute: float = 1.0,
+    lambda_recon: float = 1.0,
     modality_dropout_prob: float = 0.3,
     feature_mask_p_train: float = 0.2,
     feature_mask_p_val: float = 0.2,
@@ -119,6 +120,7 @@ def run_shared_finetune(
             device=device,
             mask_values=mask_values,                    # NEW
             lambda_contrastive=lambda_contrast,
+            lambda_recon=lambda_recon,
             lambda_impute=lambda_impute,
             modality_dropout_prob=modality_dropout_prob,
             feature_mask_p=feature_mask_p_train,
@@ -132,6 +134,7 @@ def run_shared_finetune(
             device=device,
             mask_values=mask_values,                    # NEW
             lambda_contrastive=lambda_contrast,
+            lambda_recon=lambda_recon,
             lambda_impute=lambda_impute,
             feature_mask_p=feature_mask_p_val,
             alpha_mask_recon=alpha_mask_recon,          # NEW
